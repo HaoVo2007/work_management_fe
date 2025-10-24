@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
-import Login from "../pages/Login.vue";
-import Register from "../pages/Register.vue";
+import Login from "../pages/auth/Login.vue";
+import Register from "../pages/auth/Register.vue";
 
 const routes = [
   { path: "/", redirect: "/login" },

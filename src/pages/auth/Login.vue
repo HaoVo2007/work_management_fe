@@ -38,9 +38,9 @@
 
 <script setup>
 import { reactive, ref } from "vue";
-import BaseInput from "../components/BaseInput.vue";
-import BaseButton from "../components/BaseButton.vue";
-import { useAuth } from "../composables/useAuth";
+import BaseInput from "@/components/BaseInput.vue";
+import BaseButton from "@/components/BaseButton.vue";
+import { useAuth } from "@/composables/useAuth";
 const { loading, login } = useAuth();
 const form = reactive({
     email: "",

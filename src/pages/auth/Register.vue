@@ -42,9 +42,9 @@
 
 <script setup>
 import { reactive, ref } from "vue";
-import BaseInput from "../components/BaseInput.vue";
-import BaseButton from "../components/BaseButton.vue";
-import { useAuth } from "../composables/useAuth";
+import BaseInput from "@/components/BaseInput.vue";
+import BaseButton from "@/components/BaseButton.vue";
+import { useAuth } from "@/composables/useAuth";
 const { loading, register } = useAuth();
 const form = reactive({
     name: "",
@@ -53,3 +53,4 @@ const form = reactive({
 });
 
 </script>
+        
