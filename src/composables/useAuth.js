@@ -14,7 +14,8 @@ export function useAuth() {
       if (res.success == false) {
         toast.error(res.error);
       }
-      localStorage.setItem("access_token", res.token);
+      console.log(res);
+      localStorage.setItem("access_token", res.data);
       setTimeout(() => {
         router.push("/dashboard");
       }, 1000);
