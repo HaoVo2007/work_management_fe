@@ -32,11 +32,6 @@
                                 </svg>
                             </span>
                         </div>
-                        <button
-                            class="w-32 bg-[#579DFF] hover:bg-[#7AB4FF] text-white text-sm font-medium px-3 py-1.5 rounded-md transition"
-                            @click="handleQuickAdd">
-                            Add board
-                        </button>
                     </div>
                 </div>
 

@@ -17,7 +17,7 @@ export function useAuth() {
       console.log(res);
       localStorage.setItem("access_token", res.data);
       setTimeout(() => {
-        router.push("/dashboard");
+        router.push("/home");
       }, 1000);
     } catch (err) {
       console.error(err);
@@ -30,7 +30,6 @@ export function useAuth() {
     loading.value = true;
     try {
       await AuthAPI.register(form);
-      toast.success("Account created successfully");
       setTimeout(() => {
         router.push("/login");
       }, 1000);

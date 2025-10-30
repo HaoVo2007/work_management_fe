@@ -6,6 +6,11 @@ export const BoardAPI = {
     return res.data || []
   },
 
+  async getBoardByID(boardId) {
+    const res = await api.get(`boards/${boardId}`)
+    return res.data
+  },
+
   async createBoard(payload) {
     const res = await api.post('/boards', payload)
     return res.data
