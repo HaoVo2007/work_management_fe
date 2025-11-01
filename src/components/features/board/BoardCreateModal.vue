@@ -1,35 +1,16 @@
 <script setup>
 import { reactive } from 'vue'
-import BaseInPut from './BaseInput.vue'
-import BaseButton from './BaseButton.vue'
-
-const colors = [
-  "#579DFF", "#6E59A5", "#E56B6F",
-  "#F0A04B", "#34A0A4", "#57CC99",
-  "#3A86FF", "#FFB703", "#FF6D00",
-  "#6A4C93", "#0081A7", "#2A9D8F"
-]
-
-const icons = [
-  { id: "dev", emoji: "💻", name: "IT / Development" },
-  { id: "marketing", emoji: "📢", name: "Marketing" },
-  { id: "sales", emoji: "💰", name: "Sales" },
-  { id: "design", emoji: "🎨", name: "Design" },
-  { id: "product", emoji: "📦", name: "Product" },
-  { id: "support", emoji: "🎧", name: "Customer Support" },
-  { id: "hr", emoji: "🧑‍💼", name: "Human Resource" },
-  { id: "meeting", emoji: "📅", name: "Meetings" },
-  { id: "finance", emoji: "📊", name: "Finance" },
-  { id: "strategy", emoji: "🎯", name: "Strategy" },
-]
+import BaseInput from '@/components/base/BaseInput.vue'
+import BaseButton from '@/components/base/BaseButton.vue'
+import { BOARD_COLORS, BOARD_ICONS, DEFAULTS } from '@/constants'
 
 const emit = defineEmits(["close", "submit"])
 
 const data = reactive({
   name: "",
-  color: colors[0],
+  color: DEFAULTS.BOARD_COLOR,
   background: "",
-  icon: icons[0].emoji
+  icon: DEFAULTS.BOARD_ICON
 })
 
 function selectColor(c) {
@@ -47,13 +28,13 @@ function selectIcon(icon) {
 
       <h2 class="text-lg font-semibold text-white text-center">Create Board</h2>
 
-      <BaseInPut id="name" label="Name" v-model="data.name" placeholder="Enter board name" />
+      <BaseInput id="name" label="Name" v-model="data.name" placeholder="Enter board name" />
 
       <div>
         <div class="text-sm mb-2 font-medium text-gray-300">Color</div>
         <div class="grid grid-cols-6 gap-2">
           <button
-            v-for="c in colors"
+            v-for="c in BOARD_COLORS"
             :key="c"
             @click="selectColor(c)"
             class="h-7 w-7 rounded-full border-2"
@@ -67,11 +48,11 @@ function selectIcon(icon) {
         <div class="text-sm mb-2 font-medium text-gray-300">Icon</div>
         <div class="grid grid-cols-5 gap-2">
           <button
-            v-for="icon in icons"
+            v-for="icon in BOARD_ICONS"
             :key="icon.id"
             @click="selectIcon(icon)"
             class="flex items-center justify-center rounded-lg p-2 text-xl border transition"
-            :class="data.icon === icon.id
+            :class="data.icon === icon.emoji
               ? 'bg-[#3A3D44] border-[#579DFF]'
               : 'bg-[#1F2125] border-[#2A2C31] hover:bg-[#2A2C31]'
             "

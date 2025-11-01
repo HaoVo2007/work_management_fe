@@ -1,10 +1,10 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue'
-import Header from '@/components/Header.vue'
-import Sidebar from '@/components/Sidebar.vue'
+import Header from '@/components/common/Header.vue'
+import Sidebar from '@/components/common/SideBar.vue'
 import { useRoute } from 'vue-router'
 import { useBoard } from '@/composables/useBoard'
-import BoardCreateModal from './components/BoardCreateModal.vue'
+import BoardCreateModal from './components/features/board/BoardCreateModal.vue'
 
 
 const isSidebarOpen = ref(true)
@@ -46,6 +46,7 @@ onMounted(() => {
         v-if="!isHiddenLayout"
         :is-visible="isSidebarOpen"
         :boards="boards"
+        @refresh="fetchBoards"
         @create-board="openCreateModal"
       />
 

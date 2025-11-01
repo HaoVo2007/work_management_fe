@@ -20,10 +20,10 @@ api.interceptors.response.use(
   (res) => {
     const { status, data } = res;
     const msg = data.message || "Success";
+    const method = (res.config && res.config.method) ? res.config.method.toLowerCase() : '';
+    const isGet = method === 'get';
 
-    if (status === 201) {
-      toast.success(msg);
-    } else if (status === 200) {
+    if (!isGet && (status === 201 || status === 200)) {
       toast.success(msg);
     }
 
