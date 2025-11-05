@@ -1,5 +1,6 @@
 import axios from "axios";
 import { toast } from "../plugins/toast";
+import router from "../router";
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL || "http://localhost:8080/api/v1/",
@@ -36,6 +37,7 @@ api.interceptors.response.use(
       if (status === 401) {
         toast.error("Unauthorized! Please log in again.");
         localStorage.removeItem("access_token");
+        router.push({ name: "Login" });
       } else if (status === 201) {
         toast.success(errorMsg);
       } else {

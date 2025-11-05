@@ -1,19 +1,294 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>frontend</title>
-  </head>
-  <body>
-    <div id="app"></div>
-    <script type="module" src="/src/main.js"></script>
-  </body>
+<!doctype html>
+<html lang="vi">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Task Detail Modal</title>
+  <script src="/_sdk/element_sdk.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      box-sizing: border-box;
+    }
+    
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+
+    .select-dropdown {
+      display: none;
+    }
+
+    .select-dropdown.show {
+      display: block;
+    }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="min-h-full flex items-center justify-center p-6 bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500"><!-- Modal Backdrop -->
+  <div class="fixed inset-0 flex items-center justify-center p-4 bg-black bg-opacity-50 backdrop-blur-sm"><!-- Modal Container -->
+   <div id="modal" class="w-full max-w-2xl bg-white rounded-2xl shadow-2xl border border-gray-200"><!-- Modal Header -->
+    <div class="px-8 py-6 bg-gradient-to-r from-slate-50 to-slate-100 border-b border-slate-200 rounded-t-2xl">
+     <h2 id="modal-title" class="text-2xl font-bold text-gray-800">✨ Thêm Chi Tiết Công Việc</h2>
+     <p class="text-sm text-gray-600 mt-1">Điền thông tin chi tiết để tạo công việc mới</p>
+    </div><!-- Modal Body -->
+    <form id="taskForm" class="px-8 py-8"><!-- Description -->
+     <div class="mb-6"><label for="description" id="description-label" class="block text-sm font-semibold mb-2 text-gray-700">📝 Mô Tả Công Việc</label> <textarea id="description" rows="4" class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg text-sm transition-all duration-200 bg-white resize-none focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100" placeholder="Mô tả chi tiết về công việc cần thực hiện..."></textarea>
+     </div><!-- Assignee -->
+     <div class="mb-6"><label id="assignee-label" class="block text-sm font-semibold mb-2 text-gray-700">👤 Người Phụ Trách</label>
+      <div class="relative">
+       <div id="assigneeSelect" class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg text-sm transition-all duration-200 bg-white cursor-pointer flex items-center justify-between focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100">
+        <div class="flex items-center gap-3">
+         <div class="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold text-sm">
+          ?
+         </div><span id="selectedAssignee" class="text-gray-500">Chọn người phụ trách</span>
+        </div>
+        <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+        </svg>
+       </div>
+       <div id="assigneeDropdown" class="select-dropdown absolute top-full left-0 right-0 bg-white border-2 border-gray-200 border-t-0 rounded-b-lg max-h-48 overflow-y-auto z-50">
+        <div class="px-4 py-3 cursor-pointer transition-colors duration-200 border-b border-gray-100 hover:bg-gray-50" data-value="john" data-name="John Doe" data-avatar="JD">
+         <div class="flex items-center gap-3">
+          <div class="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold text-sm">
+           JD
+          </div>
+          <div>
+           <div class="font-medium text-gray-900">
+            John Doe
+           </div>
+           <div class="text-xs text-gray-500">
+            Frontend Developer
+           </div>
+          </div>
+         </div>
+        </div>
+        <div class="px-4 py-3 cursor-pointer transition-colors duration-200 border-b border-gray-100 hover:bg-gray-50" data-value="sarah" data-name="Sarah Wilson" data-avatar="SW">
+         <div class="flex items-center gap-3">
+          <div class="w-8 h-8 rounded-full bg-gradient-to-br from-pink-500 to-rose-500 flex items-center justify-center text-white font-bold text-sm">
+           SW
+          </div>
+          <div>
+           <div class="font-medium text-gray-900">
+            Sarah Wilson
+           </div>
+           <div class="text-xs text-gray-500">
+            UI/UX Designer
+           </div>
+          </div>
+         </div>
+        </div>
+        <div class="px-4 py-3 cursor-pointer transition-colors duration-200 border-b border-gray-100 hover:bg-gray-50" data-value="mike" data-name="Mike Chen" data-avatar="MC">
+         <div class="flex items-center gap-3">
+          <div class="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center text-white font-bold text-sm">
+           MC
+          </div>
+          <div>
+           <div class="font-medium text-gray-900">
+            Mike Chen
+           </div>
+           <div class="text-xs text-gray-500">
+            Backend Developer
+           </div>
+          </div>
+         </div>
+        </div>
+        <div class="px-4 py-3 cursor-pointer transition-colors duration-200 border-b border-gray-100 hover:bg-gray-50" data-value="anna" data-name="Anna Rodriguez" data-avatar="AR">
+         <div class="flex items-center gap-3">
+          <div class="w-8 h-8 rounded-full bg-gradient-to-br from-pink-500 to-yellow-500 flex items-center justify-center text-white font-bold text-sm">
+           AR
+          </div>
+          <div>
+           <div class="font-medium text-gray-900">
+            Anna Rodriguez
+           </div>
+           <div class="text-xs text-gray-500">
+            Project Manager
+           </div>
+          </div>
+         </div>
+        </div>
+        <div class="px-4 py-3 cursor-pointer transition-colors duration-200 hover:bg-gray-50" data-value="david" data-name="David Kim" data-avatar="DK">
+         <div class="flex items-center gap-3">
+          <div class="w-8 h-8 rounded-full bg-gradient-to-br from-teal-400 to-pink-300 flex items-center justify-center text-white font-bold text-sm">
+           DK
+          </div>
+          <div>
+           <div class="font-medium text-gray-900">
+            David Kim
+           </div>
+           <div class="text-xs text-gray-500">
+            DevOps Engineer
+           </div>
+          </div>
+         </div>
+        </div>
+       </div>
+      </div>
+     </div><!-- Date Range -->
+     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+      <div><label for="startDate" id="start-date-label" class="block text-sm font-semibold mb-2 text-gray-700">📅 Ngày Bắt Đầu</label> <input type="date" id="startDate" class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg text-sm transition-all duration-200 bg-white focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100">
+      </div>
+      <div><label for="endDate" id="end-date-label" class="block text-sm font-semibold mb-2 text-gray-700">🏁 Ngày Kết Thúc</label> <input type="date" id="endDate" class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg text-sm transition-all duration-200 bg-white focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100">
+      </div>
+     </div><!-- Priority -->
+     <div class="mb-6"><label for="priority" id="priority-label" class="block text-sm font-semibold mb-2 text-gray-700">⭐ Mức Độ Ưu Tiên</label> <select id="priority" class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg text-sm transition-all duration-200 bg-white focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"> <option value="">Chọn mức độ ưu tiên</option> <option value="high">🔴 Cao - Cần hoàn thành ngay</option> <option value="medium">🟡 Trung Bình - Hoàn thành trong tuần</option> <option value="low">🟢 Thấp - Có thể hoàn thành sau</option> </select>
+     </div>
+    </form><!-- Modal Footer -->
+    <div class="px-8 py-6 flex justify-end gap-4 bg-slate-50 border-t border-slate-200 rounded-b-2xl"><button type="button" id="cancelBtn" class="px-6 py-3 rounded-lg font-semibold text-sm cursor-pointer transition-all duration-200 border-2 border-transparent bg-white text-gray-700 border-gray-300 hover:bg-gray-50 hover:border-gray-400"> <span id="cancel-button-text">❌ Hủy Bỏ</span> </button> <button type="submit" id="saveBtn" class="px-6 py-3 rounded-lg font-semibold text-sm cursor-pointer transition-all duration-200 border-2 border-transparent bg-gray-800 text-white border-gray-800 hover:bg-gray-900 hover:-translate-y-0.5 hover:shadow-lg"> <span id="save-button-text">💾 Lưu Công Việc</span> </button>
+    </div>
+   </div>
+  </div>
+  <script>
+    const defaultConfig = {
+      modal_title: "✨ Thêm Chi Tiết Công Việc",
+      description_label: "📝 Mô Tả Công Việc",
+      assignee_label: "👤 Người Phụ Trách",
+      start_date_label: "📅 Ngày Bắt Đầu",
+      end_date_label: "🏁 Ngày Kết Thúc",
+      priority_label: "⭐ Mức Độ Ưu Tiên",
+      save_button_text: "💾 Lưu Công Việc",
+      cancel_button_text: "❌ Hủy Bỏ"
+    };
+
+    async function onConfigChange(config) {
+      document.getElementById('modal-title').textContent = config.modal_title || defaultConfig.modal_title;
+      document.getElementById('description-label').textContent = config.description_label || defaultConfig.description_label;
+      document.getElementById('assignee-label').textContent = config.assignee_label || defaultConfig.assignee_label;
+      document.getElementById('start-date-label').textContent = config.start_date_label || defaultConfig.start_date_label;
+      document.getElementById('end-date-label').textContent = config.end_date_label || defaultConfig.end_date_label;
+      document.getElementById('priority-label').textContent = config.priority_label || defaultConfig.priority_label;
+      document.getElementById('save-button-text').textContent = config.save_button_text || defaultConfig.save_button_text;
+      document.getElementById('cancel-button-text').textContent = config.cancel_button_text || defaultConfig.cancel_button_text;
+    }
+
+    function mapToCapabilities(config) {
+      return {
+        recolorables: [],
+        borderables: [],
+        fontEditable: undefined,
+        fontSizeable: undefined
+      };
+    }
+
+    function mapToEditPanelValues(config) {
+      return new Map([
+        ["modal_title", config.modal_title || defaultConfig.modal_title],
+        ["description_label", config.description_label || defaultConfig.description_label],
+        ["assignee_label", config.assignee_label || defaultConfig.assignee_label],
+        ["start_date_label", config.start_date_label || defaultConfig.start_date_label],
+        ["end_date_label", config.end_date_label || defaultConfig.end_date_label],
+        ["priority_label", config.priority_label || defaultConfig.priority_label],
+        ["save_button_text", config.save_button_text || defaultConfig.save_button_text],
+        ["cancel_button_text", config.cancel_button_text || defaultConfig.cancel_button_text]
+      ]);
+    }
+
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange,
+        mapToCapabilities,
+        mapToEditPanelValues
+      });
+    }
+
+    // Custom select functionality
+    const assigneeSelect = document.getElementById('assigneeSelect');
+    const assigneeDropdown = document.getElementById('assigneeDropdown');
+    const selectedAssignee = document.getElementById('selectedAssignee');
+    let selectedValue = '';
+
+    assigneeSelect.addEventListener('click', () => {
+      assigneeDropdown.classList.toggle('show');
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!assigneeSelect.contains(e.target)) {
+        assigneeDropdown.classList.remove('show');
+      }
+    });
+
+    assigneeDropdown.addEventListener('click', (e) => {
+      const option = e.target.closest('.select-option');
+      if (option) {
+        const value = option.dataset.value;
+        const name = option.dataset.name;
+        const avatar = option.dataset.avatar;
+        
+        selectedValue = value;
+        selectedAssignee.textContent = name;
+        selectedAssignee.classList.remove('text-gray-500');
+        selectedAssignee.classList.add('text-gray-900');
+        
+        // Update avatar
+        const avatarEl = assigneeSelect.querySelector('.avatar');
+        avatarEl.textContent = avatar;
+        avatarEl.style.background = option.querySelector('.avatar').style.background;
+        
+        assigneeDropdown.classList.remove('show');
+      }
+    });
+
+    // Form handling
+    const form = document.getElementById('taskForm');
+    const saveBtn = document.getElementById('saveBtn');
+    const cancelBtn = document.getElementById('cancelBtn');
+
+    saveBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      
+      const taskData = {
+        description: document.getElementById('description').value,
+        assignee: selectedValue,
+        startDate: document.getElementById('startDate').value,
+        endDate: document.getElementById('endDate').value,
+        priority: document.getElementById('priority').value
+      };
+      
+      // Show success animation
+      const modal = document.getElementById('modal');
+      modal.style.transform = 'scale(0.98)';
+      modal.style.transition = 'transform 0.2s ease';
+      
+      setTimeout(() => {
+        modal.style.transform = 'scale(1)';
+        
+        // Show success message
+        const successMsg = document.createElement('div');
+        successMsg.innerHTML = '✅ Công việc đã được lưu thành công!';
+        successMsg.className = 'fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50';
+        document.body.appendChild(successMsg);
+        
+        setTimeout(() => {
+          successMsg.remove();
+          form.reset();
+          selectedAssignee.textContent = 'Chọn người phụ trách';
+          selectedAssignee.classList.add('text-gray-500');
+          selectedAssignee.classList.remove('text-gray-900');
+          const avatarEl = assigneeSelect.querySelector('.avatar');
+          avatarEl.textContent = '?';
+          avatarEl.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+          selectedValue = '';
+        }, 2000);
+      }, 200);
+    });
+
+    cancelBtn.addEventListener('click', () => {
+      form.reset();
+      selectedAssignee.textContent = 'Chọn người phụ trách';
+      selectedAssignee.classList.add('text-gray-500');
+      selectedAssignee.classList.remove('text-gray-900');
+      const avatarEl = assigneeSelect.querySelector('.avatar');
+      avatarEl.textContent = '?';
+      avatarEl.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+      selectedValue = '';
+    });
+
+    // Set today as default start date
+    document.getElementById('startDate').valueAsDate = new Date();
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'999bfd0d22938823',t:'MTc2MjM0MTkwNS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>

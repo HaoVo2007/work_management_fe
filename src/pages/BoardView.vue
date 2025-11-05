@@ -8,6 +8,7 @@ import EditColumnModal from '@/components/features/column/EditColumnModal.vue'
 import ConfirmModal from '@/components/common/ConfirmModal.vue'
 import AddTaskModal from '@/components/features/task/AddTaskModal.vue'
 import { TaskAPI } from '@/api/task'
+import TaskDetailModal from '@/components/features/task/TaskDetailModal.vue'
 
 const route = useRoute()
 const boardId = ref(route.params.id)
@@ -24,6 +25,9 @@ const isDeleting = ref(false)
 const showAddTask = ref(false)
 const taskColumnId = ref('')
 const isCreatingTask = ref(false)
+const showTaskDetail = ref(false)
+const selectedTask = ref(null)
+const isUpdatingTask = ref(false)
 
 watch(
   () => route.params.id,
@@ -98,6 +102,32 @@ const handleCreateTask = async (form) => {
     isCreatingTask.value = false
   }
 }
+
+const openTaskDetail = (task) => {
+  selectedTask.value = task
+  showTaskDetail.value = true
+}
+
+const handleUpdateTask = async (updatedTask) => {
+  isUpdatingTask.value = true
+  try {
+    await TaskAPI.updateTask(updatedTask.id, updatedTask)
+    // Update the task in the columns array
+    const colIndex = columns.value.findIndex(c => c.id === updatedTask.column_id)
+    if (colIndex !== -1) {
+      const taskIndex = columns.value[colIndex].tasks.findIndex(t => t.id === updatedTask.id)
+      if (taskIndex !== -1) {
+        columns.value[colIndex].tasks[taskIndex] = updatedTask
+      }
+    }
+    showTaskDetail.value = false
+    selectedTask.value = null
+  } catch (err) {
+    console.error('Error updating task:', err)
+  } finally {
+    isUpdatingTask.value = false
+  }
+}
 </script>
 
 <template>
@@ -145,8 +175,19 @@ const handleCreateTask = async (form) => {
         <!-- Tasks list -->
         <div class="space-y-2 min-h-[24px]">
           <div v-if="column.tasks && column.tasks.length">
-            <div v-for="task in column.tasks" :key="task.id" class="bg-[#1F2125] rounded-md p-2 text-sm border border-[#2A2C31] truncate">
-              {{ task.title || task.name }}
+            <div v-for="task in column.tasks" :key="task.id"
+                 class="group relative flex items-center mt-2 justify-between p-2 rounded-lg bg-gray-100 text-gray-900 shadow-sm hover:bg-gray-200 transition-all duration-200">
+              <span class="flex-1 truncate cursor-pointer" @click.stop="openTaskDetail(task)">
+                <Tooltip :text="task.title || task.name">
+                  {{ task.title || task.name }}
+                </Tooltip>
+              </span>
+              <button @click.stop="openTaskDetail(task)"
+                      class="opacity-0 group-hover:opacity-100 focus-within:opacity-100 ml-2 text-gray-600 hover:text-blue-600 p-1 rounded-md transition-all duration-200">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+                </svg>
+              </button>
             </div>
           </div>
           <p v-else class="text-gray-400 text-sm">No tasks yet</p>
@@ -154,7 +195,7 @@ const handleCreateTask = async (form) => {
 
         <!-- Add Task button -->
         <button 
-          class="mt-3 w-full text-xs py-1.5 rounded-md bg-[#2A2C31]/60 hover:bg-[#2A2C31] border border-dashed border-gray-600 text-gray-300"
+          class="mt-3 w-full text-sm py-1.5 rounded-md bg-blue-600 hover:bg-blue-700 text-white font-semibold"
           @click="openAddTask(column)">
           + Add Task
         </button>
@@ -196,6 +237,14 @@ const handleCreateTask = async (form) => {
       :members="boardMembers"
       @close="showAddTask = false"
       @submit="handleCreateTask"
+    />
+    <!-- ✅ Task Detail Modal -->
+    <TaskDetailModal
+      v-if="showTaskDetail && selectedTask"
+      :task="selectedTask"
+      :members="boardMembers"
+      @close="showTaskDetail = false"
+      @submit="handleUpdateTask"
     />
   </div>
 </template>

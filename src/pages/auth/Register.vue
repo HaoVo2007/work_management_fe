@@ -13,7 +13,7 @@
                             <BaseInput id="password" label="Password" type="password" v-model="form.password"
                                 placeholder="Enter your password" />
 
-                            <BaseButton type="submit" class="mt-5" :disabled="loading">
+                            <BaseButton type="submit" class="mt-5 w-full" :disabled="loading">
                                 {{ loading ? "Registering..." : "Sign Up" }}
                             </BaseButton>
 
