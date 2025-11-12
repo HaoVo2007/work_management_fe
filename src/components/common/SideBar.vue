@@ -148,7 +148,6 @@ const handleDeleteBoard = async () => {
     emit("refresh")
   } catch (err) {
     console.error("Error deleting board:", err)
-    toast.error("Failed to delete board")
   } finally {
     isDeleting.value = false
   }
